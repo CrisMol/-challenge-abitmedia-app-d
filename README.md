@@ -1,0 +1,1 @@
+# incluir Accept application/json en los encabezados
