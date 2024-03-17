@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\api\v1\LicenseController;
 use App\Http\Controllers\api\v1\ServiceController;
+use App\Http\Controllers\api\v1\SoftwareController;
 use App\Http\Controllers\auth\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,4 +29,14 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
      * Servicios
      */
     Route::resource('v1/services', ServiceController::class)->except(['create', 'edit']);
+
+    /**
+     * Licencias
+     */
+    Route::resource('v1/licenses', LicenseController::class)->except(['create', 'edit']);
+
+    /**
+     * Software
+     */
+    Route::resource('v1/software', SoftwareController::class)->except(['create', 'edit']);
 });

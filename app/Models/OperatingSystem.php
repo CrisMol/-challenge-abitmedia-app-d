@@ -14,7 +14,7 @@ class OperatingSystem extends Model
     protected $visible = ['id', 'name'];
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -22,6 +22,6 @@ class OperatingSystem extends Model
     */
     public function software(): BelongsToMany
     {
-        return $this->belongsToMany(Software::class);
+        return $this->belongsToMany(Software::class)->withPivot('price', 'quantity', 'availability');
     }
 }

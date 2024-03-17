@@ -21,12 +21,7 @@ class ServiceController extends ApiController
         $services = Service::all();
         // Transformar los datos de los servicios para mostrar en la respuesta
         $transformedServices = $services->map(function ($service) {
-            return [
-                'identificador' => $service->id,
-                'sku' => $service->sku,
-                'nombre' => $service->name,
-                'precio' => $service->price,
-            ];
+            return $this->createServiceStructure($service);
         });
 
         return $this->showAll($transformedServices);
@@ -51,12 +46,7 @@ class ServiceController extends ApiController
 
         $service = Service::create($data);
         // Transformar los datos del servicio para mostrar en la respuesta
-        $transformedService = [
-            'identificador' => $service->id,
-            'sku' => $service->sku,
-            'nombre' => $service->name,
-            'precio' => $service->price,
-        ];
+        $transformedService = $this->createServiceStructure($service);
 
         return $this->showOne($transformedService, 201);
     }
@@ -64,31 +54,19 @@ class ServiceController extends ApiController
     /**
      * Muestra los detalles de un servicio.
      *
-     * Muestra los detalles de un servicio específico, verificando primero que el servicio no esté marcado como eliminado.
-     * Si el servicio no existe o está eliminado, devuelve un error con el código de estado 404.
-     *
      * @param Service $service El servicio cuyos detalles se van a mostrar.
      * @return Illuminate\Http\JsonResponse Una respuesta JSON que contiene los detalles del servicio.
      */
     public function show(Service $service)
     {
         // Transformar los datos del servicio para mostrar en la respuesta
-        $transformedService = [
-            'identificador' => $service->id,
-            'sku' => $service->sku,
-            'nombre' => $service->name,
-            'precio' => $service->price,
-        ];
+        $transformedService = $this->createServiceStructure($service);
 
         return $this->showOne($transformedService);
     }
 
    /**
      * Actualiza un servicio existente.
-     *
-     * Actualiza los detalles de un servicio existente, verificando primero que el servicio no esté marcado como eliminado.
-     * Si el servicio no existe o está eliminado, devuelve un error con el código de estado 404. Si no se especifica ningún valor diferente
-     * para actualizar, devuelve un error con el código de estado 422.
      *
      * @param UpdateServiceRequest $request La solicitud de actualización que contiene los datos enviados por el cliente.
      * @param Service $service El servicio a actualizar.
@@ -111,29 +89,35 @@ class ServiceController extends ApiController
 
         $service->save();
         // Transformar los datos del servicio para mostrar en la respuesta
-        $transformedService = [
-            'identificador' => $service->id,
-            'sku' => $service->sku,
-            'nombre' => $service->name,
-            'precio' => $service->price,
-        ];
+        $transformedService = $this->createServiceStructure($service);
 
         return $this->showOne($transformedService);
     }
 
     /**
-     * Elimina un servicio a nivel lógico, cambia de estado 0 (activo) a 1 (eliminado)
+     * Crea una estructura de servicio a partir de un objeto de servicio.
      *
-     * Elimina un servicio marcando su estado como eliminado ('status' = 1). Si el servicio ya está eliminado,
-     * devuelve un error con el código de estado 404.
+     * @param Service $service El objeto del servicio del cual se creará la estructura.
+     * @return array La estructura del servicio.
+     */
+    public function createServiceStructure($service)
+    {
+        return [
+            'identificador' => $service->id,
+            'sku' => $service->sku,
+            'nombre' => $service->name,
+            'precio' => $service->price,
+        ];
+    }
+
+    /**
+     * Elimina un servicio a nivel lógico
      *
      * @param Service $service El servicio a eliminar.
      * @return Illuminate\Http\JsonResponse Una respuesta JSON indicando el resultado de la eliminación.
      */
     public function destroy(Service $service)
     {
-
-        // Estado 1
         $service->delete();
         // Mostrar el servicio en la respuesta
         $transformedService = [

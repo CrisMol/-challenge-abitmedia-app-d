@@ -23,7 +23,7 @@ class UpdateServiceRequest extends FormRequest
     {
         $serviceId = $this->route('service')->id;
 
-        return [
+        return [ 
             'sku' => 'required|string|min:10|max:10|unique:services,sku,' . $serviceId,
             'nombre' => 'required|string|max:55',
             'precio' => 'required|decimal:2,2',

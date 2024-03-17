@@ -21,6 +21,7 @@ class Software extends Model
         'name',
         'sku',
         'status',
+        'software_type_id'
     ];
 
     protected $hidden = [
@@ -45,7 +46,7 @@ class Software extends Model
     */
     public function operatingSystems(): BelongsToMany
     {
-        return $this->belongsToMany(OperatingSystem::class);
+        return $this->belongsToMany(OperatingSystem::class)->withPivot('price', 'quantity', 'availability');
     }
 
     /**

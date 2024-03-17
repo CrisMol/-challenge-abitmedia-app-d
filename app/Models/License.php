@@ -16,7 +16,7 @@ class License extends Model
     protected $fillable = [
         'serial',
         'status',
-        'product_id',
+        'software_id',
     ];
 
     /**
